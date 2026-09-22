@@ -30,6 +30,7 @@ namespace WinFormsApp1
             newF = new ToolStripMenuItem("New File");
             newF.ShortcutKeys = Keys.Control | Keys.N;
             newF.ShowShortcutKeys = true;
+            newF.Click += NewFile_Click;
 
             openF = new ToolStripMenuItem("Open File");
             openF.ShortcutKeys = Keys.Control | Keys.O;
@@ -74,6 +75,21 @@ namespace WinFormsApp1
             return menu;
         }
 
+        public static void AttachDocument(TextBoxBase document)
+        {
+            newF.Tag = document;
+            openF.Tag = document;
+        }
+
+        static void NewFile_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
+            if (clickedItem.Tag is TextBoxBase document)
+            {
+                document.Clear();
+            }
+        }
+
         static void OpenFile_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
@@ -83,14 +99,21 @@ namespace WinFormsApp1
             OpenFileDialog ofd = new OpenFileDialog();
             if(ofd.ShowDialog() == DialogResult.OK)
             {
-                if (label == null)
-                {
-                    MessageBox.Show("Null");
-                    return;
-                }
                 try
                 {
                     string fileText = File.ReadAllText(ofd.FileName);
+
+                    if (clickedItem.Tag is TextBoxBase document)
+                    {
+                        document.Text = fileText;
+                        return;
+                    }
+
+                    if (label == null)
+                    {
+                        MessageBox.Show("Null");
+                        return;
+                    }
                     label.Text = fileText;
                 }
                 catch(Exception ex)

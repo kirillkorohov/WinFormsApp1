@@ -10,6 +10,8 @@ namespace WinFormsApp1
 
         private MenuStrip menu;
         private Label label;
+        private RichTextBox editor;
+        private Panel sidebarHost;
 
         public Form1()
         {
@@ -20,8 +22,21 @@ namespace WinFormsApp1
 
             menu = CreateMenu.Form1_CreateMenu();
 
+            editor = CreateEditor.Form1_CreateEditor();
+            CreateMenu.AttachDocument(editor);
+
+            sidebarHost = new Panel
+            {
+                Name = "sidebarHost",
+                Dock = DockStyle.Left,
+                Width = 250,
+                BackColor = Color.Gainsboro
+            };
+
             this.MainMenuStrip = menu;
-            this.Controls.AddRange(new Control[] { menu, label});
+            this.Controls.Add(editor);
+            this.Controls.Add(sidebarHost);
+            this.Controls.Add(menu);
         }
 
     }
